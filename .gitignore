@@ -1,18 +1,34 @@
-# Build and Release Folders
-bin-debug/
-bin-release/
-[Oo]bj/
-[Bb]in/
+from tkinter import *
+from tkinter import filedialog
 
-# Other files and folders
-.settings/
+def new_file():
+    text_area.delete(1.0, END)
 
-# Executables
-*.swf
-*.air
-*.ipa
-*.apk
+def open_file():
+    file = filedialog.askopenfilename(defaultextension=".txt", filetypes=[("Text files", ".txt"), ("All files", ".*")])
+    if file:
+        text_area.delete(1.0, END)
+        with open(file, "r") as f:
+            text_area.insert(1.0, f.read())
 
-# Project files, i.e. `.project`, `.actionScriptProperties` and `.flexProperties`
-# should NOT be excluded as they contain compiler settings and other important
-# information for Eclipse / Flash Builder.
+def save_file():
+    file = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Text files", ".txt"), ("All files", ".*")])
+    if file:
+        with open(file, "w") as f:
+            f.write(text_area.get(1.0, END))
+
+root = Tk()
+root.title("Bloco de Notas")
+
+text_area = Text(root)
+text_area.pack(expand=True, fill=BOTH)
+
+menu_bar = Menu(root)
+file_menu = Menu(menu_bar, tearoff=0)
+file_menu.add_command(label="Novo", command=new_file)
+file_menu.add_command(label="Abrir", command=open_file)
+file_menu.add_command(label="Salvar", command=save_file)
+menu_bar.add_cascade(label="Arquivo", menu=file_menu)
+
+root.config(menu=menu_bar)
+root.mainloop()
